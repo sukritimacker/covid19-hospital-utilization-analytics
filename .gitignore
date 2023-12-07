@@ -1,1 +1,23 @@
+# MacOS
 .DS_Store
+
+# Python
+__pycache__/
+venv/
+
+# VS Code
+.vscode/
+
+# Terraform
+*.tfvars
+.terraform/
+*.lock*
+*.tfstate*
+
+# Env variables & secrets
+.env
+*_creds.json
+
+# Local
+data/
+ssh/
