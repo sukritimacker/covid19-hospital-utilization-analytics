@@ -31,39 +31,18 @@ resource "google_compute_instance" "prefect_vm" {
     private_key = tls_private_key.ssh.private_key_pem
   }
 
-  provisioner "file" {
-    source      = "${local.prefect_dir}/create_blocks.py"
-    destination = "create_blocks.py"
+  provisioner "remote-exec" {
+    inline = [
+      "#!/bin/bash",
+      "echo Creating directories",
+      "mkdir prefect",
+      "mkdir pyspark",
+    ]
   }
-
+  
   provisioner "file" {
-    source      = "${local.prefect_dir}/create_deployments.py"
-    destination = "create_deployments.py"
-  }
-
-  provisioner "file" {
-    source      = "${local.prefect_dir}/etl_gov_to_gcs.py"
-    destination = "etl_gov_to_gcs.py"
-  }
-
-  provisioner "file" {
-    source      = "${local.prefect_dir}/etl_gcs_to_gbq.py"
-    destination = "etl_gcs_to_gbq.py"
-  }
-
-  provisioner "file" {
-    source      = "${local.prefect_dir}/service_account_creds.json"
-    destination = "service_account_creds.json"
-  }
-
-#   provisioner "file" {
-#     source      = "${local.prefect_dir}/start_pyspark_jobs.py"
-#     destination = "start_pyspark_jobs.py"
-#   }
-
-  provisioner "file" {
-    source      = "${local.prefect_dir}/requirements.txt"
-    destination = "requirements.txt"
+    source      = "${local.prefect_dir}/"
+    destination = "prefect"
   }
 
   provisioner "file" {
@@ -71,34 +50,20 @@ resource "google_compute_instance" "prefect_vm" {
     destination = "setup_prefect.sh"
   }
 
-#   provisioner "file" {
-#     source      = "${local.pyspark_dir}/create_hosts_dimension_table.py"
-#     destination = "create_hosts_dimension_table.py"
-#   }
-
-#   provisioner "file" {
-#     source      = "${local.pyspark_dir}/create_countries_dimension_table.py"
-#     destination = "create_countries_dimension_table.py"
-#   }
-
-#   provisioner "file" {
-#     source      = "${local.pyspark_dir}/create_languages_dimension_table.py"
-#     destination = "create_languages_dimension_table.py"
-#   }
-
-#   provisioner "file" {
-#     source      = "${local.pyspark_dir}/create_teams_dimension_table.py"
-#     destination = "create_teams_dimension_table.py"
-#   }
+  provisioner "file" {
+    source      = "${local.pyspark_dir}/"
+    destination = "pyspark"
+  }
 
   provisioner "remote-exec" {
     inline = [
+      "#!/bin/bash",
       "echo export CLUSTER=${google_dataproc_cluster.spark_cluster.name} >> .bashrc",
-      "echo ${google_storage_bucket.data_lake_bucket.name} > data_lake_bucket_name.txt",
       "echo export REGION=${var.region} >> .bashrc",
-      "source .bashrc",
-      "bash setup_prefect.sh",
-      "gcloud auth activate-service-account ${google_service_account.service_account.email} --key-file=service_account_creds.json"
+      "echo export DATAPROC_TEMP_BUCKET=${google_storage_bucket.dataproc_temp_bucket.name} >> .bashrc",
+      "echo export DATA_LAKE_BUCKET=${google_storage_bucket.data_lake_bucket.name} >> .bashrc",
+      "bash -i setup_prefect.sh",
+      "gcloud auth activate-service-account ${google_service_account.service_account.email} --key-file=prefect/service_account_creds.json"
     ]
   }
 }
