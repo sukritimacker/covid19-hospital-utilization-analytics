@@ -6,9 +6,7 @@ import json
 with open("service_account_creds.json") as f:
     contents = f.read()
 
-with open("data_lake_bucket_name.txt") as f:
-    bucket_name = f.read()
-    bucket_name = bucket_name.replace("\n", "")
+bucket_name = os.getenv("DATA_LAKE_BUCKET")
 
 service_account_info = json.loads(contents)
 

@@ -20,21 +20,25 @@ def spark_submit(file: str):
             file,
             f"--cluster={os.environ['CLUSTER']}",
             f"--region={os.environ['REGION']}",
-        ]
+            "--",
+            os.getenv("DATAPROC_TEMP_BUCKET"),
+        ],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        encoding='utf-8'
     )
+    logger.info(res.stdout)
     logger.info(f"Job status code: {res.returncode}")
 
 
 @flow()
 def start_pyspark_jobs() -> None:
-    jobs = [
-        "create_hosts_dimension_table.py",
-        "create_countries_dimension_table.py",
-        "create_teams_dimension_table.py",
-        "create_languages_dimension_table.py",
-    ]
+    logger = get_run_logger()
+    pyspark_dir = os.path.join(os.path.expanduser("~"), "pyspark")
+    jobs = sorted(os.listdir(pyspark_dir))
+    logger.info("Running jobs in order:\n" + '\n'.join(jobs))
     for job in jobs:
-        spark_submit(job)
+        spark_submit(os.path.join(pyspark_dir, job))
 
 
 if __name__ == "__main__":

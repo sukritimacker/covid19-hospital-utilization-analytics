@@ -1,15 +1,11 @@
 sudo sed -i 's/#$nrconf{restart} = '"'"'i'"'"';/$nrconf{restart} = '"'"'a'"'"';/g' /etc/needrestart/needrestart.conf
-
 echo "fixed the restart services screen problem"
 
-sudo apt update 
-sudo apt upgrade -y
-
-sudo 
+sudo apt update && sudo apt upgrade -y
 
 sudo apt install python3-venv python3-pip sqlite3 openjdk-11-jdk -y
 
-cd $HOME
+cd $HOME/prefect
 
 python3 -m venv venv
 source venv/bin/activate
