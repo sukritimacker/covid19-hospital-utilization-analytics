@@ -117,9 +117,9 @@ total_confirmed_adult_patients_withStates = total_confirmed_adult_patients.join(
 
 
 
-total_confirmed_adult_patients_withStates.write.format("bigquery").option(
-    "table", "prod_dataset.metro_micro_table"
-).mode("overwrite").save()
+# total_confirmed_adult_patients_withStates.write.format("bigquery").option(
+#     "table", "prod_dataset.metro_micro_table"
+# ).mode("overwrite").save()
 
 
 

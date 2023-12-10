@@ -79,7 +79,7 @@ hospitalization_comparison = df2.groupBy("year", "month" ,"state" ) \
 # In[ ]:
 
 
-hospitalization_comparison.write.format("bigquery").option(
-    "table", "prod_dataset.influenza_covid_comparison_table"
-).mode("overwrite").save()
+# hospitalization_comparison.write.format("bigquery").option(
+#     "table", "prod_dataset.influenza_covid_comparison_table"
+# ).mode("overwrite").save()
 

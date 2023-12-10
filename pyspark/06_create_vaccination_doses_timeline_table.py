@@ -58,7 +58,7 @@ admission_vaccination_df = data_as \
 # In[ ]:
 
 
-admission_vaccination_df.write.format("bigquery").option(
-    "table", "prod_dataset.vaccination_doses_timeline_table"
-).mode("overwrite").save()
+# admission_vaccination_df.write.format("bigquery").option(
+#     "table", "prod_dataset.vaccination_doses_timeline_table"
+# ).mode("overwrite").save()
 

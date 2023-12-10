@@ -72,7 +72,7 @@ pediatric_admissions_by_month = pediatric_admissions_by_month.filter(col('age_0_
 # In[ ]:
 
 
-pediatric_admissions_by_month.write.format("bigquery").option(
-    "table", "prod_dataset.pediatric_admissions_table"
-).mode("overwrite").save()
+# pediatric_admissions_by_month.write.format("bigquery").option(
+#     "table", "prod_dataset.pediatric_admissions_table"
+# ).mode("overwrite").save()
 

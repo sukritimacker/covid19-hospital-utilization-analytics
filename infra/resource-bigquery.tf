@@ -78,3 +78,15 @@ resource "google_bigquery_table" "influenza_covid_comparison_table" {
   table_id            = "influenza_covid_comparison_table"
   deletion_protection = false
 }
+
+resource "google_bigquery_table" "hospital_reporting_countrywide_table" {
+  dataset_id          = google_bigquery_dataset.prod_dataset.dataset_id
+  table_id            = "hospital_reporting_countrywide_table"
+  deletion_protection = false
+}
+
+resource "google_bigquery_table" "hospital_reporting_statewide_table" {
+  dataset_id          = google_bigquery_dataset.prod_dataset.dataset_id
+  table_id            = "hospital_reporting_statewide_table"
+  deletion_protection = false
+}

@@ -138,7 +138,7 @@ sum_covid_monthly_withStates = sum_covid_monthly_as.join(state_df, sum_covid_mon
 
 
 
-sum_covid_monthly_withStates.write.format("bigquery").option(
-    "table", "prod_dataset.covid_tred_month_year_table"
-).mode("overwrite").save()
+# sum_covid_monthly_withStates.write.format("bigquery").option(
+#     "table", "prod_dataset.covid_tred_month_year_table"
+# ).mode("overwrite").save()
 

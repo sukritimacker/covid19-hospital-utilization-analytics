@@ -137,9 +137,9 @@ bed_utli_states = utilized_beds_by_state.join(state_df, utilized_beds_by_state['
 
 
 
-bed_utli_states.write.format("bigquery").option(
-    "table", "prod_dataset.icu_bed_utilization_table"
-).mode("overwrite").save()
+# bed_utli_states.write.format("bigquery").option(
+#     "table", "prod_dataset.icu_bed_utilization_table"
+# ).mode("overwrite").save()
 
 
 
