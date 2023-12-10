@@ -1,0 +1,85 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# Query 1: Calculate the cumulative sum vaccinated doses over years
+
+# In[ ]:
+
+
+import pyspark
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import split, countDistinct
+import requests
+import pandas as pd
+from io import StringIO
+import warnings
+from collections import Counter
+from pyspark.sql.functions import col, when, isnan, sum , to_date, split, corr, date_format,concat,lit
+from pyspark.sql.window import Window
+from pyspark.sql import functions as F
+import tqdm
+import sys
+
+# Create SparkSession
+spark = SparkSession.builder.config(
+    "temporaryGcsBucket", sys.argv[1]
+).getOrCreate()
+
+df = spark.read.format("bigquery").option("table", "raw_dataset.raw_data_cleaned").load()
+
+
+# In[ ]:
+
+
+
+
+
+
+# In[ ]:
+
+
+df = df.withColumn('collection_week', to_date(col('collection_week'), 'yyyy/MM/dd'))
+
+
+# In[ ]:
+
+
+df = df.withColumn("year", split("collection_week", "-")[0].cast("int"))
+
+
+# In[ ]:
+
+
+df = df.withColumn("month", split("collection_week", "-")[1].cast("int"))
+df = df.withColumn("month&year", concat(df["year"], lit("-"), df["month"]))
+df2 = df.filter(col('total_patients_hospitalized_confirmed_influenza_7_day_sum').isNotNull()& \
+              (col('total_patients_hospitalized_confirmed_influenza_7_day_sum')!=0)& \
+              col('total_adult_patients_hospitalized_confirmed_covid_7_day_sum').isNotNull()& \
+              (col('total_adult_patients_hospitalized_confirmed_covid_7_day_sum')!=0))
+df2.select(col('total_patients_hospitalized_confirmed_influenza_7_day_sum')).show(6000)
+
+
+# In[ ]:
+
+
+hospitalization_comparison = df2.groupBy("year", "month" ,"state" ) \
+    .agg(
+        sum("total_patients_hospitalized_confirmed_influenza_7_day_sum").alias("influenza_patients"),
+        sum("total_adult_patients_hospitalized_confirmed_covid_7_day_sum").alias("covid_patients")
+    ) \
+    .orderBy("year", "month" , "state")
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+hospitalization_comparison.write.format("bigquery").option(
+    "table", "prod_dataset.influenza_covid_comparison_table"
+).mode("overwrite").save()
+
