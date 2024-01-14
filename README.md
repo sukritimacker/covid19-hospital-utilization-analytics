@@ -84,7 +84,7 @@ To improve query performance, I partitioned all tables in Google BigQuery (GBQ) 
 
 Finally, we leverage the dimension tables to create an interactive dashboard that provides insights about the data. Business Intelligence (BI) tools are used to create these dashboards, enabling users to analyze data and visualize it in a meaningful way. BI tools can connect to data sources, transform data, and display it in various formats such as tables, charts, and graphs.
 
-The dashboard showcases some of the insights that can be gained from the data and provides an example of the types of analysis that can be performed with Looker Studio. Here are some screenshots of the dashboard, and you can also make a copy of the dashboard yourself using this [link](https://lookerstudio.google.com/s/pPw3hPGC2V0). This makes it easy for anyone to replicate the project and gain insights into the types of analysis that can be performed with Looker Studio.
+The [dashboard](https://lookerstudio.google.com/s/pPw3hPGC2V0) showcases some of the insights that can be gained from the data and provides an example of the types of analysis that can be performed with Looker Studio. Below are some screenshots of the dashboard.
 
 ![dashboard page 1](./images/dashboard1.png)
 ![dashboard page 2](./images/dashboard2.png)
